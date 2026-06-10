@@ -5,22 +5,9 @@ name: Maven Build CI
 
 on:
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: false
-        default: 'warning'
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
-  push:
-    branches:
-      - master
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -33,3 +20,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      fail-fast: false
